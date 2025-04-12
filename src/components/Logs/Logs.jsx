@@ -3,8 +3,8 @@ function Logs({turns}) {
         <ol id="log">
             {turns.map(turn => {
                 return (
-                    <li key={`${turn.square.row}`+`${turn.square.col}`}>
-                        <span>{turn.square.row},{turn.square.col}, {turn.player} </span>
+                    <li key={`${turn.square.row}${turn.square.col}`}>
+                        <span> {turn.player} selected ({turn.square.row},{turn.square.col}) </span>
                     </li>
                 )
             })}

@@ -6,35 +6,37 @@ import Logs from "./components/Logs/Logs.jsx";
 
 function App() {
 
-    const [activePlayer, setActivePlayer] = useState('X');
     const [gameTurns, setGameTurns] = useState([]);
 
-    function handleSelectedSquare(event, rowIndex, colIndex) {
-        event.target.disabled = true
-
-        setActivePlayer(activePlayer === 'X' ? 'O' : 'X');
-
+    function handleSelectedSquare(rowIndex, colIndex) {
+        const activePlayer = getActivePlayer(gameTurns);
         setGameTurns(prevTurns => {
-            let currentPlayer = 'X'
-
-            if (prevTurns.length > 0 && prevTurns[0].player === 'X') {
-                currentPlayer = 'O'
-            }
-            return [{square: {row: rowIndex, col: colIndex}, player: currentPlayer}, ...prevTurns]
+            return [{square: {row: rowIndex, col: colIndex}, player: activePlayer}, ...prevTurns]
         })
     }
 
     return <main>
         <div id="game-container">
             <ol id="players" className="highlight-player">
-                <Player initialName={"Player 1"} symbol={"X"} isActive={activePlayer === 'X'}/>
-                <Player initialName={"Player 2"} symbol={"O"} isActive={activePlayer === 'O'}/>
+                <Player initialName={"Player 1"} symbol={"X"} isActive={getActivePlayer(gameTurns) === 'X'}/>
+                <Player initialName={"Player 2"} symbol={"O"} isActive={getActivePlayer(gameTurns) === 'O'}/>
             </ol>
             <GameBoard onSelectSquare={handleSelectedSquare} turns={gameTurns}/>
 
         </div>
         <Logs turns={gameTurns}/>
     </main>;
+}
+
+
+function getActivePlayer(gameTurns) {
+    let activePlayer = 'X'
+
+    if (gameTurns.length > 0 && gameTurns[0].player === 'X') {
+        activePlayer = 'O'
+    }
+
+    return activePlayer;
 }
 
 export default App
