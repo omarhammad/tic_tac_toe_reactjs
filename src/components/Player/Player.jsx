@@ -34,5 +34,4 @@ function Player({initialName = "", symbol, onPlayerNameChanged, isActive}) {
         </li>
     );
 }
-
 export default Player;

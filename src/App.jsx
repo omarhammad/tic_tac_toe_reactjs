@@ -6,18 +6,19 @@ import Logs from "./components/Logs/Logs.jsx";
 import {WINNING_COMBINATIONS} from "./data/winning_combos.js";
 import GameOver from "./components/GameOver/GameOver.jsx";
 
+
+const PLAYERS = {
+    X: 'Player 1',
+    O: 'Player 2'
+}
+
 function App() {
 
     const [gameTurns, setGameTurns] = useState([]);
-    const [players, setPlayers] = useState({
-        X: 'Player 1',
-        O: 'Player 2'
-    })
+    const [players, setPlayers] = useState(PLAYERS)
 
     const gameBoard = getGameBoard(gameTurns)
-
     const winner = checkWinner(gameBoard, players);
-
     const hasDraw = gameTurns.length === 9
 
 
