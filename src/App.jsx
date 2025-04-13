@@ -9,10 +9,14 @@ import GameOver from "./components/GameOver/GameOver.jsx";
 function App() {
 
     const [gameTurns, setGameTurns] = useState([]);
+    const [players, setPlayers] = useState({
+        X: 'Player 1',
+        O: 'Player 2'
+    })
 
     const gameBoard = getGameBoard(gameTurns)
 
-    const winner = checkWinner(gameBoard);
+    const winner = checkWinner(gameBoard, players);
 
     const hasDraw = gameTurns.length === 9
 
@@ -28,12 +32,20 @@ function App() {
         setGameTurns([])
     }
 
+    function handlePlayerNameChange(symbol, newName) {
+        setPlayers(prePlayers => {
+            return {...prePlayers, [symbol]: newName.toUpperCase()}
+        });
+    }
+
     return (
         <main>
             <div id="game-container">
                 <ol id="players" className="highlight-player">
-                    <Player initialName={"Player 1"} symbol={"X"} isActive={getActivePlayer(gameTurns) === 'X'}/>
-                    <Player initialName={"Player 2"} symbol={"O"} isActive={getActivePlayer(gameTurns) === 'O'}/>
+                    <Player initialName={players.X} symbol={"X"} onPlayerNameChanged={handlePlayerNameChange}
+                            isActive={getActivePlayer(gameTurns) === 'X'}/>
+                    <Player initialName={players.O} symbol={"O"} onPlayerNameChanged={handlePlayerNameChange}
+                            isActive={getActivePlayer(gameTurns) === 'O'}/>
                 </ol>
                 {(winner || hasDraw) && <GameOver winner={winner} onRematch={handleRematch}/>}
                 <GameBoard onSelectSquare={handleSelectedSquare} board={gameBoard}/>
@@ -71,7 +83,7 @@ function getGameBoard(gameTurns) {
     return gameBoard
 }
 
-function checkWinner(gameBoard) {
+function checkWinner(gameBoard, players) {
 
     for (const comb of WINNING_COMBINATIONS) {
         const firstSquareSymbol = gameBoard[comb[0].row][comb[0].column]
@@ -79,7 +91,7 @@ function checkWinner(gameBoard) {
         const thirdSquareSymbol = gameBoard[comb[2].row][comb[2].column]
 
         if (firstSquareSymbol && firstSquareSymbol === secondSquareSymbol && firstSquareSymbol === thirdSquareSymbol) {
-            return firstSquareSymbol
+            return players[firstSquareSymbol]
         }
     }
     return undefined
